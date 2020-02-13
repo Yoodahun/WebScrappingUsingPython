@@ -1,0 +1,1 @@
+INDEED_ADDRESS = "https://jp.indeed.com/%E6%B1%82%E4%BA%BA?q=python&l=%E6%9D%B1%E4%BA%AC%E9%83%BD&limit=50&radius=25"

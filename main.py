@@ -1,6 +1,27 @@
 import requests
-import 
+import address
+from bs4 import BeautifulSoup
 
-indeed_result = requests.get("https://jp.indeed.com/%E6%B1%82%E4%BA%BA?as_and=python&as_phr=&as_any=&as_not=&as_ttl=&as_cmp=&jt=all&st=&as_src=&salary=&radius=25&l=%E6%9D%B1%E4%BA%AC%E9%83%BD&fromage=any&limit=50&sort=&psf=advsrch&from=advancedsearch")
 
-print(indeed_result.text)
+indeed_result = requests.get(address.INDEED_ADDRESS)
+
+indeed_soup = BeautifulSoup(indeed_result.text, 'html.parser')
+
+pagination = indeed_soup.find("div", {"class":"pagination"})
+
+# print(pagination.prettify())
+
+
+links = pagination.find_all("a")
+# print(links)
+pages = []
+
+
+for link in links[0:-1]:
+  pages.append(int(link.find("span").string))
+print(pages[0:-1]) #-1 is not included
+print(pages[-1])
+
+max_page = pages[-1]
+# pages.pop(-1)
+# print(pages)
