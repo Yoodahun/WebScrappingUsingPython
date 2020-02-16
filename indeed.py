@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 LIMIT = 50
 ADDRESS = f"https://jp.indeed.com/%E6%B1%82%E4%BA%BA?q=python&l=%E6%9D%B1%E4%BA%AC%E9%83%BD&limit={LIMIT}&radius=25"
 
-# extract_indeed_pages()
+# get_last_page()
 # request를 실행하여 데이터를 받아옴.
 # 받아온 텍스트들을 html형태로 parsing함.
 # parsing한 html중에 `.pagination` 을 가진 div를 전부 찾음.
@@ -14,7 +14,7 @@ ADDRESS = f"https://jp.indeed.com/%E6%B1%82%E4%BA%BA?q=python&l=%E6%9D%B1%E4%BA%
 # 빈 배열의 내용을 확인 후, 제일 큰 값을 max_page로 지정
 # return
 
-def extract_indeed_pages():
+def get_last_page():
   result = requests.get(ADDRESS)
   soup = BeautifulSoup(result.text, 'html.parser')
   pagination = soup.find("div", {"class":"pagination"})
@@ -30,7 +30,7 @@ def extract_indeed_pages():
   max_page = pages[-1]
   return max_page
 
-# extract_indeed_jobs
+# get_jobs
 # last_pages를 parameter로 받아, 해당 크기만큼의 range를 생성한 후
 # 그 range만큼 for문을 실행.
 ### address에 &start=를 추가. 리미트에 페이지 크기를 곱하준 후 Request실행. 각 페이지 추출
@@ -39,7 +39,7 @@ def extract_indeed_pages():
 ### find_all한 결과를 대상으로 extract_job실행
 ### 실행결과를 배열 jobs에 보존
 ### return
-def extract_indeed_jobs(last_pages):
+def extract_jobs(last_pages):
   jobs = []
   for page in range(last_pages):
     print(f"Scrapping page {page}")
@@ -74,4 +74,8 @@ def extract_job(html):
   'link' : f"https://jp.indeed.com/%E4%BB%95%E4%BA%8B?jk={job_id}"    
   }
 
-  
+def get_jobs():
+  last_pages = get_last_page();
+
+  jobs = extract_jobs(last_pages)
+  return jobs
